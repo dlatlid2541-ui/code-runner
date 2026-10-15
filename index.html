@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>CODE RUNNERS — 코드 러너즈</title>
+    <link rel="stylesheet" href="css/game.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- 타이틀 · 캐릭터 선택 -->
+      <section id="screen-title" class="screen">
+        <h1 class="logo">CODE RUNNERS</h1>
+        <p class="subtitle">코드 러너즈: 사이버 월드 대탈출<br />삐야와 오르가 백신을 모으며 바이러스를 피하세요!</p>
+        <p class="char-select-label">캐릭터 선택</p>
+        <div class="char-cards">
+          <button type="button" class="char-card" data-char="piya">
+            <img src="ppiya_front.png" alt="삐야" />
+            <div class="name">삐야 PIYA</div>
+            <div class="role">노란 병아리 · AI 탐험가</div>
+          </button>
+          <button type="button" class="char-card" data-char="oru">
+            <img src="oru_front.png" alt="오르" />
+            <div class="name">오르 ORU</div>
+            <div class="role">하얀 곰 · 사이버 수호자</div>
+          </button>
+        </div>
+        <button type="button" id="btn-start" class="btn-primary">게임 시작</button>
+        <p class="controls-hint">
+          ← → 또는 A D · 레인 이동<br />
+          ↑ 또는 Space · 점프 · Esc · 일시정지<br />
+          캐릭터 선택 또는 시작 시 배경음악 재생
+        </p>
+        <button type="button" id="btn-mute-title" class="btn-mute" title="음소거">🔊</button>
+      </section>
+
+      <!-- 플레이 -->
+      <section id="screen-game" class="screen hidden">
+        <header class="game-hud">
+          <div id="hearts" class="hearts" aria-label="생명력"></div>
+          <div class="score-block">
+            <div class="label">SCORE</div>
+            <div id="score-value" class="value">0</div>
+          </div>
+          <div class="hud-right">
+            <span id="distance-value">0m</span>
+            <button type="button" id="btn-mute-game" class="btn-icon btn-mute" title="음소거">🔊</button>
+            <button type="button" id="btn-pause" class="btn-icon" title="일시정지">⏸</button>
+          </div>
+        </header>
+
+        <div class="track-wrap">
+          <div class="track">
+            <div class="grid-floor" aria-hidden="true"></div>
+            <div class="lane-lines" aria-hidden="true">
+              <div class="lane-line"></div>
+              <div class="lane-line"></div>
+            </div>
+            <div class="neon-sides"></div>
+            <div class="neon-sides right"></div>
+            <div id="entities"></div>
+            <div id="player" class="trail-piya">
+              <div id="player-floats" class="player-floats" aria-hidden="true"></div>
+              <img id="player-img" src="" alt="플레이어" />
+            </div>
+          </div>
+        </div>
+
+        <div id="pause-overlay" class="pause-overlay hidden">
+          <h2>PAUSED</h2>
+          <p>Space 또는 ⏸ 버튼으로 계속</p>
+        </div>
+      </section>
+
+      <!-- 게임 오버 -->
+      <section id="screen-gameover" class="screen hidden">
+        <h2>GAME OVER</h2>
+        <div class="stats">
+          <p>최종 점수</p>
+          <p class="big" id="final-score">0</p>
+          <p>최고 기록 <span class="record" id="best-score">0</span></p>
+        </div>
+        <div class="gameover-actions">
+          <button type="button" id="btn-restart" class="btn-primary">다시 시작</button>
+          <button type="button" id="btn-change-char" class="btn-secondary">캐릭터 변경</button>
+        </div>
+      </section>
+    </div>
+    <script src="js/audio.js"></script>
+    <script src="js/game.js"></script>
+  </body>
+</html>
