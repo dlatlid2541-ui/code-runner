@@ -1,23 +1,42 @@
 (function () {
   "use strict";
 
-  const MAX_HP = 5;
   const INVINCIBLE_MS = 1500;
   const JUMP_MS = 550;
   const COIN_SCORE = 100;
   const JUMP_DODGE_SCORE = 20;
   const STORAGE_KEY = "codeRunnersBest";
 
+  const ENTITY_ASSETS = {
+    virus: "assets/entities/virus.png",
+    vaccine: "assets/entities/vaccine.png",
+    coin: "assets/entities/coin.png",
+  };
+
+  const ENTITY_ALT = {
+    virus: "바이러스",
+    vaccine: "백신",
+    coin: "코인",
+  };
+
   const CHARACTERS = {
     piya: {
       name: "삐야",
       prefix: "ppiya",
       trailClass: "trail-piya",
+      maxHp: 3,
+      hitExtendAbovePx: 0,
+      hitExtendAboveRatio: 0,
+      hitExtendBelowPx: 0,
     },
     oru: {
       name: "오르",
       prefix: "oru",
       trailClass: "trail-oru",
+      maxHp: 5,
+      hitExtendAbovePx: 0,
+      hitExtendAboveRatio: 0.59,
+      hitExtendBelowPx: 0,
     },
   };
 
@@ -81,6 +100,7 @@
     playerImg: document.getElementById("player-img"),
     scoreBlock: document.querySelector(".score-block"),
     entities: document.getElementById("entities"),
+    track: document.querySelector(".track"),
     gridFloor: document.querySelector(".grid-floor"),
     finalScore: document.getElementById("final-score"),
     bestScore: document.getElementById("best-score"),
@@ -90,7 +110,7 @@
 
   let selectedChar = null;
   let state = "title";
-  let hp = MAX_HP;
+  let hp = 0;
   let score = 0;
   let distanceM = 0;
   let elapsed = 0;
@@ -122,6 +142,13 @@
   function preloadCharSprites(key) {
     const paths = spritePaths(key);
     [paths.front, ...paths.run, ...paths.heal, ...paths.hit].forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }
+
+  function preloadEntitySprites() {
+    Object.values(ENTITY_ASSETS).forEach((src) => {
       const img = new Image();
       img.src = src;
     });
@@ -194,9 +221,14 @@
     el.gridFloor.style.animationDuration = dur + "s";
   }
 
+  function maxHp() {
+    return CHARACTERS[selectedChar].maxHp;
+  }
+
   function renderHearts() {
+    const max = maxHp();
     el.hearts.innerHTML = "";
-    for (let i = 0; i < MAX_HP; i++) {
+    for (let i = 0; i < max; i++) {
       const h = document.createElement("span");
       h.className = "heart" + (i < hp ? " on" : "");
       el.hearts.appendChild(h);
@@ -241,7 +273,7 @@
   function startGame() {
     if (!selectedChar) return;
     bootAudio();
-    hp = MAX_HP;
+    hp = maxHp();
     score = 0;
     distanceM = 0;
     elapsed = 0;
@@ -337,7 +369,12 @@
   function createEntity(kind, laneIndex) {
     const dom = document.createElement("div");
     dom.className = "entity " + kind;
-    if (kind === "coin") dom.textContent = "100";
+    const img = document.createElement("img");
+    img.src = ENTITY_ASSETS[kind];
+    img.alt = ENTITY_ALT[kind];
+    img.draggable = false;
+    img.decoding = "async";
+    dom.appendChild(img);
     el.entities.appendChild(dom);
     return {
       kind,
@@ -350,8 +387,31 @@
   }
 
   function playerHitbox() {
-    const jumpFactor = jumping ? 0.55 : 1;
-    return { lane, yMin: 78, yMax: 92, jumpFactor };
+    const c = CHARACTERS[selectedChar];
+    const track = el.track;
+    const img = el.playerImg;
+    if (!c || !track || !img) {
+      return { lane, yMin: 84, yMax: 90 };
+    }
+
+    const tr = track.getBoundingClientRect();
+    const ir = img.getBoundingClientRect();
+    if (tr.height <= 0 || ir.height <= 0) {
+      return { lane, yMin: 84, yMax: 90 };
+    }
+
+    const extendAbove =
+      (c.hitExtendAbovePx ?? 0) + (c.hitExtendAboveRatio ?? 0) * ir.height;
+    const extendBelow = c.hitExtendBelowPx ?? 0;
+
+    const topPx = ir.top - tr.top - extendAbove;
+    const bottomPx = ir.bottom - tr.top + extendBelow;
+
+    return {
+      lane,
+      yMin: (topPx / tr.height) * 100,
+      yMax: (bottomPx / tr.height) * 100,
+    };
   }
 
   function entityHitsPlayer(ent) {
@@ -404,7 +464,7 @@
     ent.collected = true;
     ent.dom.remove();
     if (ent.kind === "vaccine") {
-      hp = Math.min(MAX_HP, hp + 1);
+      hp = Math.min(maxHp(), hp + 1);
       renderHearts();
       playPlayerAnim("heal");
       if (sfx()) sfx().playSfx("heal");
@@ -525,5 +585,6 @@
   });
 
   el.btnStart.disabled = true;
+  preloadEntitySprites();
   syncMuteButtons();
 })();

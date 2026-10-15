@@ -1,0 +1,5 @@
+﻿Entity image credits (CC0):
+- coin.png — Kenney, Generic Items (opengameart.org/content/generic-items)
+- vaccine.png — Kenney, Generic Items (syringe icon)
+- virus.png — TeeKay, Virus various colors (opengameart.org/content/virus-various-colors)
+Optional credit: Kenney.nl

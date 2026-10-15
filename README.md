@@ -24,9 +24,18 @@
 - `js/game.js` — 게임 로직
 - `js/audio.js` — BGM·효과음
 - `audio/` — 배경음·효과음 파일
+- `assets/entities/` — 바이러스·백신·코인 이미지
 - `ppiya_*.png`, `oru_*.png` — 캐릭터 스프라이트
 
 ## 사운드 라이선스
 
 - BGM: Kenney Music Loops (CC0)
 - 효과음: Kenney Interface Sounds (CC0), sfxmint ready-coin-05 (CC0)
+
+## 그래픽 라이선스 (CC0)
+
+- `assets/entities/coin.png` — Kenney, [Generic Items](https://opengameart.org/content/generic-items)
+- `assets/entities/vaccine.png` — Kenney, [Generic Items](https://opengameart.org/content/generic-items)
+- `assets/entities/virus.png` — TeeKay, [Virus, various colors](https://opengameart.org/content/virus-various-colors)
+
+자세한 출처는 `assets/entities/CREDITS.txt` 를 참고하세요.

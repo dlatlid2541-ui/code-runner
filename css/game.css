@@ -59,7 +59,9 @@ body {
 #screen-title {
   background: radial-gradient(ellipse at 50% 0%, #1a0a3d 0%, var(--bg-dark) 55%);
   text-align: center;
-  gap: 1.25rem;
+  gap: 0.85rem;
+  overflow-y: auto;
+  justify-content: safe center;
 }
 
 .logo {
@@ -96,8 +98,8 @@ body {
 }
 
 .char-card {
-  width: 140px;
-  padding: 0.75rem;
+  width: 176px;
+  padding: 0.75rem 0.7rem 0.85rem;
   border: 2px solid rgba(255, 255, 255, 0.15);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.04);
@@ -116,7 +118,7 @@ body {
 
 .char-card img {
   width: 100%;
-  height: 110px;
+  height: 96px;
   object-fit: contain;
   object-position: center bottom;
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
@@ -131,6 +133,86 @@ body {
 .char-card .role {
   font-size: 0.75rem;
   color: #8899bb;
+}
+
+.char-traits {
+  margin-top: 0.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.trait {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.trait dt {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #9aadc8;
+}
+
+.trait-hp,
+.trait-hit {
+  display: flex;
+  align-items: center;
+  gap: 0.28rem;
+}
+
+.mini-heart {
+  width: 11px;
+  height: 11px;
+  background: var(--neon-pink);
+  clip-path: polygon(
+    50% 18%,
+    61% 6%,
+    78% 6%,
+    89% 18%,
+    89% 35%,
+    50% 78%,
+    11% 35%,
+    11% 18%,
+    22% 6%,
+    39% 6%
+  );
+  filter: drop-shadow(0 0 3px var(--neon-pink));
+}
+
+/* 세로 피격 구간 — 막대 높이로 위·아래 판정 폭 표시 */
+.hit-zone {
+  display: block;
+  width: 10px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.hit-zone.narrow {
+  height: 12px;
+  background: linear-gradient(180deg, rgba(0, 245, 255, 0.25), var(--neon-cyan));
+  box-shadow: 0 0 6px rgba(0, 245, 255, 0.45);
+}
+
+.hit-zone.wide {
+  height: 30px;
+  background: linear-gradient(180deg, rgba(0, 245, 255, 0.25), var(--neon-cyan));
+  box-shadow: 0 0 6px rgba(0, 245, 255, 0.45);
+}
+
+.hit-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--neon-cyan);
+}
+
+.trait-summary {
+  margin-top: 0.45rem;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: #c5d4ea;
 }
 
 .btn-primary {
@@ -360,63 +442,61 @@ body {
   will-change: top, left;
 }
 
-.entity.virus {
-  width: 52px;
-  height: 52px;
-  border-radius: 50% 50% 50% 20%;
-  background: radial-gradient(circle at 30% 30%, #c77dff, #5a189a);
-  box-shadow: 0 0 20px var(--neon-purple), inset -4px -4px 0 rgba(0, 0, 0, 0.3);
+.entity img {
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
 }
 
-.entity.virus::before,
-.entity.virus::after {
-  content: "";
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  background: #3c096c;
-  border-radius: 50%;
-  top: 35%;
-}
-.entity.virus::before {
-  left: 18%;
-}
-.entity.virus::after {
-  right: 18%;
+.entity.virus img {
+  width: 62px;
+  height: 62px;
+  filter: drop-shadow(0 0 14px rgba(199, 125, 255, 0.95));
+  animation: entity-virus-wobble 1.15s ease-in-out infinite;
 }
 
-.entity.vaccine {
-  width: 28px;
-  height: 44px;
-  border-radius: 14px;
-  background: linear-gradient(180deg, #39ff14, #0d7377);
-  box-shadow: 0 0 18px #39ff14;
+.entity.vaccine img {
+  width: 46px;
+  height: auto;
+  filter: drop-shadow(0 0 16px rgba(57, 255, 20, 0.8));
+  animation: entity-vaccine-float 1.6s ease-in-out infinite;
 }
 
-.entity.vaccine::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 45%;
-  width: 80%;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.7);
-  transform: translateX(-50%);
+.entity.coin img {
+  width: 50px;
+  height: 50px;
+  filter: drop-shadow(0 0 14px rgba(255, 215, 0, 0.85));
+  animation: entity-coin-spin 2.5s linear infinite;
 }
 
-.entity.coin {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #ffe566, #c9a227);
-  box-shadow: 0 0 16px #ffd700;
-  font-family: Orbitron, sans-serif;
-  font-size: 0.55rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #5c4a00;
+@keyframes entity-virus-wobble {
+  0%,
+  100% {
+    transform: rotate(-4deg) scale(1);
+  }
+  50% {
+    transform: rotate(4deg) scale(1.04);
+  }
+}
+
+@keyframes entity-vaccine-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes entity-coin-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 #player {
@@ -428,6 +508,16 @@ body {
   z-index: 15;
   transition: left 0.12s ease-out;
   pointer-events: none;
+}
+
+#player.trail-piya {
+  width: 78px;
+  height: 90px;
+}
+
+#player.trail-oru {
+  width: 142px;
+  height: 162px;
 }
 
 .player-floats {
@@ -538,10 +628,12 @@ body {
 }
 
 #player.trail-piya::after {
+  width: 30px;
   background: #ffd60a;
 }
 
 #player.trail-oru::after {
+  width: 72px;
   background: #4cc9f0;
 }
 
@@ -637,9 +729,15 @@ body {
 }
 
 @media (max-height: 640px) {
-  #player {
+  #player.trail-piya {
     bottom: 10%;
-    width: 60px;
+    width: 52px;
     height: 60px;
+  }
+
+  #player.trail-oru {
+    bottom: 10%;
+    width: 92px;
+    height: 108px;
   }
 }
