@@ -728,6 +728,307 @@ body {
   background: rgba(0, 245, 255, 0.12);
 }
 
+.btn-settings {
+  width: 100%;
+  max-width: 280px;
+  margin-top: -0.25rem;
+}
+
+.difficulty-row {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 320px;
+  justify-content: center;
+}
+
+.difficulty-btn {
+  flex: 1;
+  padding: 0.55rem 0.35rem;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: #9aadc8;
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.difficulty-btn.selected {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 16px rgba(0, 245, 255, 0.28);
+}
+
+.difficulty-hint {
+  font-size: 0.72rem;
+  color: #6a7a9a;
+  max-width: 320px;
+  line-height: 1.45;
+  margin-top: -0.35rem;
+}
+
+.wave-banner {
+  position: absolute;
+  top: 3.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-family: Orbitron, sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: #07051a;
+  background: linear-gradient(135deg, var(--neon-cyan), #7df9ff);
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.45);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.wave-banner.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.wave-banner.show {
+  animation: wave-banner-pop 2.2s ease-out forwards;
+}
+
+@keyframes wave-banner-pop {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(6px) scale(0.92);
+  }
+  12% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-4px) scale(0.98);
+  }
+}
+
+/* —— Settings —— */
+#screen-settings {
+  z-index: 50;
+  background: radial-gradient(ellipse at 50% 0%, #1a0a3d 0%, var(--bg-dark) 55%);
+  justify-content: flex-start;
+  padding-top: 2rem;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+.settings-heading {
+  font-family: Orbitron, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 24px rgba(0, 245, 255, 0.35);
+}
+
+.settings-tabs {
+  display: flex;
+  gap: 0.65rem;
+  width: 100%;
+  max-width: 340px;
+}
+
+.settings-tab {
+  flex: 1;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.25);
+  color: #8a9bb8;
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.settings-tab.active {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 18px rgba(0, 245, 255, 0.25);
+  background: rgba(0, 245, 255, 0.06);
+}
+
+.settings-panel {
+  width: 100%;
+  max-width: 340px;
+  padding: 1.1rem 1rem 1.25rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 245, 255, 0.22);
+  background: rgba(8, 12, 32, 0.85);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.35);
+}
+
+.settings-tab-panel.hidden {
+  display: none;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+}
+
+.settings-row-slider {
+  cursor: default;
+  flex-wrap: wrap;
+}
+
+.settings-row:last-of-type {
+  border-bottom: none;
+}
+
+.settings-label {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #dce8ff;
+  flex-shrink: 0;
+}
+
+.settings-check {
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid rgba(0, 245, 255, 0.45);
+  background: rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.settings-check:checked {
+  background: var(--neon-cyan);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.45);
+}
+
+.settings-check:checked::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 11px;
+  border: solid #07051a;
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+}
+
+.settings-range {
+  flex: 1;
+  min-width: 100px;
+  height: 6px;
+  appearance: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  accent-color: var(--neon-cyan);
+}
+
+.settings-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(0, 245, 255, 0.6);
+  cursor: pointer;
+}
+
+.settings-range:disabled {
+  opacity: 0.35;
+}
+
+.settings-pct {
+  font-family: Orbitron, sans-serif;
+  font-size: 0.8rem;
+  color: var(--neon-cyan);
+  min-width: 2.75rem;
+  text-align: right;
+}
+
+.btn-settings-test {
+  width: 100%;
+  margin-top: 0.85rem;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 245, 255, 0.45);
+  background: rgba(0, 245, 255, 0.06);
+  color: var(--neon-cyan);
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-settings-test:hover {
+  background: rgba(0, 245, 255, 0.14);
+}
+
+.settings-controls-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.settings-controls-list li {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+  font-size: 0.88rem;
+  color: #c5d4ea;
+  line-height: 1.5;
+}
+
+.settings-controls-list li span:last-child {
+  margin-left: auto;
+  font-weight: 700;
+  color: #e8f4ff;
+}
+
+.settings-controls-list .key {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 245, 255, 0.35);
+  background: rgba(0, 245, 255, 0.1);
+  font-family: Orbitron, sans-serif;
+  font-size: 0.72rem;
+  color: var(--neon-cyan);
+}
+
+.settings-back {
+  width: 100%;
+  max-width: 340px;
+  margin-top: auto;
+  margin-bottom: 1.5rem;
+  padding: 0.95rem 1rem;
+  border-radius: 12px;
+}
+
+.pause-overlay .btn-secondary {
+  margin-top: 0.5rem;
+  min-width: 160px;
+}
+
 @media (max-height: 640px) {
   #player.trail-piya {
     bottom: 10%;

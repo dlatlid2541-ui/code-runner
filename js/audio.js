@@ -14,14 +14,18 @@
     score: "audio/sfx_score.mp3",
   };
 
+  const SETTINGS_KEY = "codeRunnersAudioSettings";
+
   const GameAudio = {
     unlocked: false,
     muted: false,
+    enabled: { bgm: true, sfx: true },
     volume: { bgm: 0.42, sfx: 0.72 },
     bgmLobby: null,
     bgmGame: null,
     sfx: {},
     currentBgm: null,
+    lastBgmKind: "lobby",
 
     init() {
       this.bgmLobby = this.makeLoop(PATH.bgmLobby);
@@ -31,6 +35,64 @@
         hit: this.makeOneShot(PATH.hit),
         score: this.makeOneShot(PATH.score),
       };
+      this.loadSettings();
+      this.applyBgmVolume();
+    },
+
+    loadSettings() {
+      try {
+        const raw = localStorage.getItem(SETTINGS_KEY);
+        if (!raw) return;
+        const o = JSON.parse(raw);
+        if (typeof o.bgm === "boolean") this.enabled.bgm = o.bgm;
+        if (typeof o.sfx === "boolean") this.enabled.sfx = o.sfx;
+        if (typeof o.bgmVol === "number" && o.bgmVol >= 0 && o.bgmVol <= 1) {
+          this.volume.bgm = o.bgmVol;
+        }
+        if (typeof o.sfxVol === "number" && o.sfxVol >= 0 && o.sfxVol <= 1) {
+          this.volume.sfx = o.sfxVol;
+        }
+      } catch (_) {
+        /* ignore */
+      }
+    },
+
+    saveSettings() {
+      localStorage.setItem(
+        SETTINGS_KEY,
+        JSON.stringify({
+          bgm: this.enabled.bgm,
+          sfx: this.enabled.sfx,
+          bgmVol: this.volume.bgm,
+          sfxVol: this.volume.sfx,
+        })
+      );
+    },
+
+    setBgmEnabled(on) {
+      this.enabled.bgm = !!on;
+      this.saveSettings();
+      if (!this.enabled.bgm) {
+        this.pauseBgm();
+      } else if (this.unlocked && !this.muted) {
+        this.playBgm(this.lastBgmKind);
+      }
+    },
+
+    setSfxEnabled(on) {
+      this.enabled.sfx = !!on;
+      this.saveSettings();
+    },
+
+    setBgmVolume(v) {
+      this.volume.bgm = Math.max(0, Math.min(1, v));
+      this.applyBgmVolume();
+      this.saveSettings();
+    },
+
+    setSfxVolume(v) {
+      this.volume.sfx = Math.max(0, Math.min(1, v));
+      this.saveSettings();
     },
 
     makeLoop(src) {
@@ -76,7 +138,8 @@
     },
 
     playBgm(kind) {
-      if (!this.unlocked || this.muted) return;
+      this.lastBgmKind = kind === "game" ? "game" : "lobby";
+      if (!this.unlocked || this.muted || !this.enabled.bgm) return;
       const next = kind === "game" ? this.bgmGame : this.bgmLobby;
       if (this.currentBgm === next && !next.paused) return;
 
@@ -95,12 +158,12 @@
     },
 
     resumeBgm() {
-      if (!this.unlocked || this.muted || !this.currentBgm) return;
+      if (!this.unlocked || this.muted || !this.enabled.bgm || !this.currentBgm) return;
       this.currentBgm.play().catch(() => {});
     },
 
     playSfx(name) {
-      if (!this.unlocked || this.muted) return;
+      if (!this.unlocked || this.muted || !this.enabled.sfx) return;
       const base = this.sfx[name];
       if (!base) return;
       const clip = base.cloneNode();

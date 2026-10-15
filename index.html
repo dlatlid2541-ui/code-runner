@@ -63,7 +63,15 @@
             <p class="trait-summary">세로 피격 김 · 체력 5칸</p>
           </button>
         </div>
+        <p class="char-select-label">난이도</p>
+        <div class="difficulty-row" role="group" aria-label="난이도 선택">
+          <button type="button" class="difficulty-btn" data-difficulty="easy">쉬움</button>
+          <button type="button" class="difficulty-btn selected" data-difficulty="normal">보통</button>
+          <button type="button" class="difficulty-btn" data-difficulty="hard">어려움</button>
+        </div>
+        <p class="difficulty-hint" id="difficulty-hint">보통 · 표준 속도와 스폰</p>
         <button type="button" id="btn-start" class="btn-primary">게임 시작</button>
+        <button type="button" id="btn-settings" class="btn-secondary btn-settings">설정</button>
         <p class="controls-hint">
           ← → 또는 A D · 레인 이동<br />
           ↑ 또는 Space · 점프 · Esc · 일시정지<br />
@@ -87,6 +95,7 @@
           </div>
         </header>
 
+        <div id="wave-banner" class="wave-banner hidden" aria-live="polite"></div>
         <div class="track-wrap">
           <div class="track">
             <div class="grid-floor" aria-hidden="true"></div>
@@ -107,7 +116,49 @@
         <div id="pause-overlay" class="pause-overlay hidden">
           <h2>PAUSED</h2>
           <p>Space 또는 ⏸ 버튼으로 계속</p>
+          <button type="button" id="btn-settings-pause" class="btn-secondary">설정</button>
         </div>
+      </section>
+
+      <!-- 설정 -->
+      <section id="screen-settings" class="screen hidden">
+        <h2 class="settings-heading">설정</h2>
+        <div class="settings-tabs" role="tablist">
+          <button type="button" class="settings-tab active" role="tab" aria-selected="true" data-tab="sound">소리</button>
+          <button type="button" class="settings-tab" role="tab" aria-selected="false" data-tab="controls">조작</button>
+        </div>
+        <div class="settings-panel">
+          <div id="settings-panel-sound" class="settings-tab-panel" role="tabpanel">
+            <label class="settings-row">
+              <span class="settings-label">배경음악</span>
+              <input type="checkbox" id="setting-bgm-on" class="settings-check" checked />
+            </label>
+            <div class="settings-row settings-row-slider">
+              <span class="settings-label">BGM 볼륨</span>
+              <input type="range" id="setting-bgm-vol" class="settings-range" min="0" max="100" value="42" />
+              <span id="setting-bgm-vol-label" class="settings-pct">42%</span>
+            </div>
+            <label class="settings-row">
+              <span class="settings-label">효과음</span>
+              <input type="checkbox" id="setting-sfx-on" class="settings-check" checked />
+            </label>
+            <div class="settings-row settings-row-slider">
+              <span class="settings-label">효과음 볼륨</span>
+              <input type="range" id="setting-sfx-vol" class="settings-range" min="0" max="100" value="72" />
+              <span id="setting-sfx-vol-label" class="settings-pct">72%</span>
+            </div>
+            <button type="button" id="btn-sfx-test" class="btn-settings-test">효과음 테스트</button>
+          </div>
+          <div id="settings-panel-controls" class="settings-tab-panel hidden" role="tabpanel" hidden>
+            <ul class="settings-controls-list">
+              <li><span class="key">← →</span> 또는 <span class="key">A D</span><span>레인 이동</span></li>
+              <li><span class="key">↑</span> 또는 <span class="key">Space</span><span>점프</span></li>
+              <li><span class="key">Esc</span><span>일시정지</span></li>
+              <li><span class="key">⏸</span><span>일시정지 (화면 버튼)</span></li>
+            </ul>
+          </div>
+        </div>
+        <button type="button" id="btn-settings-back" class="btn-primary settings-back">돌아가기</button>
       </section>
 
       <!-- 게임 오버 -->
@@ -116,6 +167,7 @@
         <div class="stats">
           <p>최종 점수</p>
           <p class="big" id="final-score">0</p>
+          <p>난이도 <span id="final-difficulty">보통</span></p>
           <p>최고 기록 <span class="record" id="best-score">0</span></p>
         </div>
         <div class="gameover-actions">
